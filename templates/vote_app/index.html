@@ -1,0 +1,145 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <title>Django Voting App</title>
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="#">Django Voting App</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="#about">About</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#instructions">Instructions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#result">Result</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container-fluid" style="margin-bottom:20rem">
+
+    {{stats}}
+    <div class="row">
+        <div class="col-md-6" style="margin: 1rem auto 0 auto;">
+            <img class="img-fluid" src="{% static 'logo.png' %}" style="display:block; margin: 0 auto;">
+            <div class="card">
+                <div class="card-body">
+                    <form method="get" action="{% url 'get_query' %}">
+                        <input list="languages" class="form-control" style="margin-bottom:1rem;" name="languages">
+                        <datalist id="languages">
+                            {% for language in languages %}
+                            <option value="{{language}}">
+                                {% endfor %}
+                        </datalist>
+                        <div class="row">
+                            <div class="col-6">
+                                <input type="submit" class="btn btn-success" style="display:block; margin: 0 auto;">
+                            </div>
+
+                            <div class="col-6">
+                                <input type="reset" class="btn btn-danger" style="display:block; margin: 0 auto;">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6" style="margin: 2rem auto 0 auto;">
+            <p class="badge badge-warning" id="result" name="result"
+               style="text-align: center; margin: 0 auto; display: block; font-size:2rem;">Result</p>
+            <hr>
+            <p class="lead" style="text-align: center;">Result Table </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6" style="margin: 2rem auto 0 auto;">
+            <p class="badge badge-success" id="about" name="about"
+               style="text-align: center; margin: 0 auto; display: block; font-size:2rem;">About</p>
+            <hr>
+            <p class="lead" style="text-align: center;">Pick your favorite language and vote</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Language</th>
+                        <th scope="col">Votes</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for key, value in stats.items %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{key}}</td>
+                        <td>
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" style="width: {{value.percent}}%"
+                                     aria-valuenow="{{value.value}}"
+                                     aria-valuemin="{{min}}" aria-valuemax="{{max}}">{{value.value}}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6" style="margin: 2rem auto 0 auto;">
+            <p class="badge badge-danger" id="about" name="about"
+               style="text-align: center; margin: 0 auto; display: block; font-size:2rem;">Instructions</p>
+            <hr>
+            <p class="display-4" id="instructions" name="instructions" style="text-align: center;">Select your language
+                and see results</p>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <footer class="fixed-bottom navbar-light" style="background: black; color: white; text-align:center;">
+            <p>Footer</p>
+        </footer>
+    </div>
+</div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+</body>
+</html>
